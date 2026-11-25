@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta & Direktori Wilayah Kota Semarang</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter & Noto Sans Javanese (untuk aksara Hanacaraka) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Javanese:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        javanese: ['"Noto Sans Javanese"', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Toast Notification (Pengganti alert) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-2.5 text-sm font-medium">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+            <span id="toast-text">Berhasil</span>
+        </div>
+    </div>
+
+    <!-- =================================================================
+         HEADER & RINGKASAN STATISTIK KOTA SEMARANG
+         ================================================================= -->
+    <header class="bg-gradient-to-r from-slate-950 via-blue-950 to-rose-950 text-white shadow-md border-b border-white/10 shrink-0">
+        <div class="max-w-[1720px] mx-auto px-4 sm:px-6 py-3">
+            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+
+                <!-- Identitas Aplikasi -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-blue-700 flex items-center justify-center shadow-lg border border-white/20 shrink-0">
+                        <i data-lucide="map-pinned" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">
+                                Peta & Direktori Wilayah Kota Semarang
+                            </h1>
+                            <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-rose-700/80 border border-rose-500/40 text-rose-100 rounded-full">
+                                Kode 33.74
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-300">
+                            Direktori Administratif, Kuliner, Medis Darurat, Rute Wisata & Tempat Ibadah Multi-Agama
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Statistik Ringkas + Ekspor Data -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 bg-white/10 border border-white/15 rounded-xl px-3 py-1.5 text-xs">
+                        <div class="flex items-center gap-1 pr-2.5 border-r border-white/15">
+                            <span class="font-bold text-rose-300">16</span>
+                            <span class="text-slate-300">Kecamatan</span>
+                        </div>
+                        <div class="flex items-center gap-1 pr-2.5 border-r border-white/15">
+                            <span class="font-bold text-sky-300">177</span>
+                            <span class="text-slate-300">Kelurahan</span>
+                        </div>
+                        <div class="flex items-center gap-1 pr-2.5 border-r border-white/15">
+                            <span class="font-bold text-amber-300">373,70</span>
+                            <span class="text-slate-300">km²</span>
+                        </div>
+                        <div class="flex items-center gap-1 pr-2.5 border-r border-white/15">
+                            <span class="font-bold text-emerald-300">1,70jt</span>
+                            <span class="text-slate-300">Jiwa</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <span class="font-bold text-violet-300">4.559</span>
+                            <span class="text-slate-300">jiwa/km²</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="downloadCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-colors cursor-pointer">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                            <span class="hidden sm:inline">Unduh</span> CSV
+                        </button>
+                        <button onclick="downloadJSON()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 active:bg-white/25 text-white border border-white/15 text-xs font-semibold rounded-xl transition-colors cursor-pointer">
+                            <i data-lucide="file-json" class="w-3.5 h-3.5 text-amber-300"></i>
+                            <span class="hidden sm:inline">Unduh</span> JSON
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- =================================================================
+         KONTEN UTAMA: SPLIT-VIEW (PANEL KIRI MULTI-TAB + GOOGLE MAPS KANAN)
+         ================================================================= -->
+    <main class="flex-1 max-w-[1720px] w-full mx-auto p-3 sm:p-4">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+
+            <!-- =================================================================
+                 PANEL KIRI (NAVIGASI TAB & DIREKTORI INTERAKTIF)
+                 ================================================================= -->
+            <aside class="order-2 lg:order-1 lg:col-span-5 xl:col-span-5 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden lg:h-[calc(100vh-100px)] lg:min-h-[660px]">
+
+                <!-- TAB SWITCHER NAVIGASI UTAMA -->
+                <div class="bg-slate-900 p-1.5 flex items-center justify-between gap-1 overflow-x-auto shrink-0 border-b border-slate-800 scrollbar-none">
+                    <button onclick="switchTab('wilayah')" id="tab-btn-wilayah" class="tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 bg-blue-950 text-white shadow-sm border border-blue-800">
+                        <i data-lucide="map" class="w-4 h-4"></i>
+                        <span>Wilayah</span>
+                    </button>
+                    <button onclick="switchTab('kuliner')" id="tab-btn-kuliner" class="tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 text-slate-400 hover:text-white hover:bg-white/5">
+                        <i data-lucide="utensils" class="w-4 h-4"></i>
+                        <span>Kuliner</span>
+                    </button>
+                    <button onclick="switchTab('darurat')" id="tab-btn-darurat" class="tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 text-slate-400 hover:text-white hover:bg-white/5">
+                        <i data-lucide="ambulance" class="w-4 h-4 text-rose-400"></i>
+                        <span>Darurat</span>
+                    </button>
+                    <button onclick="switchTab('wisata')" id="tab-btn-wisata" class="tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 text-slate-400 hover:text-white hover:bg-white/5">
+                        <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
+                        <span>Wisata</span>
+                    </button>
+                    <button onclick="switchTab('ibadah')" id="tab-btn-ibadah" class="tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 text-slate-400 hover:text-white hover:bg-white/5">
+                        <i data-lucide="landmark" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Ibadah</span>
+                    </button>
+                </div>
+
+                <!-- BAR KONTEKS TERPILIH (Pintar Lintas Tab) -->
+                <div id="smart-district-banner" class="hidden bg-amber-50 border-b border-amber-200 px-3.5 py-2 text-xs flex items-center justify-between gap-2 shrink-0">
+                    <div class="flex items-center gap-2 truncate">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+                        <span class="text-amber-900">Wilayah Aktif: <strong id="smart-district-name">Kecamatan</strong></span>
+                    </div>
+                    <button onclick="clearSelectedDistrictContext()" class="text-[11px] text-amber-800 hover:text-amber-950 font-semibold underline shrink-0">
+                        Lepas Filter
+                    </button>
+                </div>
+
+                <!-- =================================================
+                     TAB 1: WILAYAH (16 KECAMATAN & 177 KELURAHAN)
+                     ================================================= -->
+                <div id="tab-content-wilayah" class="tab-panel flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div class="p-3.5 border-b border-slate-200 bg-slate-50/70 space-y-3 shrink-0">
+                        <div class="relative">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                            <input
+                                type="text"
+                                id="search-input-wilayah"
+                                oninput="handleWilayahSearch()"
+                                placeholder="Cari kecamatan, kelurahan, kode pos, atau Kemendagri..."
+                                class="w-full pl-10 pr-9 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition-all"
+                            >
+                            <button id="clear-search-wilayah" onclick="clearWilayahSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer">
+                                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Pembagian Wilayah Kota</span>
+                                <span id="wilayah-count" class="text-[11px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
+                                    16 Kec • 177 Kel
+                                </span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button data-region="Semua" onclick="setRegion('Semua')" class="region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-950 text-white transition-all">Semua</button>
+                                <button data-region="Semarang Pusat" onclick="setRegion('Semarang Pusat')" class="region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200">Semarang Pusat</button>
+                                <button data-region="Semarang Utara" onclick="setRegion('Semarang Utara')" class="region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200">Semarang Utara</button>
+                                <button data-region="Semarang Timur" onclick="setRegion('Semarang Timur')" class="region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200">Semarang Timur</button>
+                                <button data-region="Semarang Barat" onclick="setRegion('Semarang Barat')" class="region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200">Semarang Barat</button>
+                                <button data-region="Semarang Selatan" onclick="setRegion('Semarang Selatan')" class="region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200">Semarang Selatan</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="district-list" class="flex-1 overflow-y-auto p-3 space-y-2.5">
+                        <!-- Dirender JS -->
+                    </div>
+                </div>
+
+                <!-- =================================================
+                     TAB 2: KULINER & OLEH-OLEH
+                     ================================================= -->
+                <div id="tab-content-kuliner" class="tab-panel hidden flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div class="p-3 border-b border-slate-200 bg-slate-50/80 space-y-2 shrink-0">
+                        <div class="relative">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                            <input
+                                type="text"
+                                id="search-input-kuliner"
+                                oninput="renderKulinerList()"
+                                placeholder="Cari Lumpia, Bandeng, Soto, Tahu Gimbal..."
+                                class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
+                            >
+                        </div>
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none" id="kuliner-filter-pills">
+                            <button onclick="setKulinerFilter('Semua')" class="kuliner-pill active px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-700 text-white shrink-0">Semua</button>
+                            <button onclick="setKulinerFilter('Kuliner Legendaris')" class="kuliner-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">Kuliner Legendaris</button>
+                            <button onclick="setKulinerFilter('Pusat Oleh-Oleh')" class="kuliner-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">Pusat Oleh-Oleh</button>
+                            <button onclick="setKulinerFilter('Jajanan & Pasar Malam')" class="kuliner-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">Jajanan & Pasar Malam</button>
+                        </div>
+                    </div>
+                    <div id="kuliner-list" class="flex-1 overflow-y-auto p-3 space-y-2.5">
+                        <!-- Dirender JS -->
+                    </div>
+                </div>
+
+                <!-- =================================================
+                     TAB 3: DARURAT & MEDIS
+                     ================================================= -->
+                <div id="tab-content-darurat" class="tab-panel hidden flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div class="p-3 border-b border-slate-200 bg-rose-50/60 space-y-2 shrink-0">
+                        <!-- BANNER TIM DARURAT PANGGILAN CEPAT -->
+                        <div class="bg-rose-900 text-white rounded-xl p-3 shadow-xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-rose-200 flex items-center gap-1.5">
+                                    <i data-lucide="phone-call" class="w-4 h-4 text-rose-400 animate-pulse"></i>
+                                    Panggilan Darurat Kota Semarang
+                                </span>
+                                <span class="text-[10px] bg-rose-800 px-2 py-0.5 rounded text-rose-200">24 Jam</span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                                <button onclick="copyToClipboard('112', 'Panggilan Darurat 112')" class="bg-rose-950/80 hover:bg-rose-950 px-2 py-1.5 rounded-lg text-left transition-colors cursor-pointer border border-rose-700/50">
+                                    <span class="block text-[10px] text-rose-300">Darurat Semarang</span>
+                                    <span class="font-mono font-extrabold text-xs text-yellow-300">☎ 112</span>
+                                </button>
+                                <button onclick="copyToClipboard('119', 'Ambulans Hebat 119')" class="bg-rose-950/80 hover:bg-rose-950 px-2 py-1.5 rounded-lg text-left transition-colors cursor-pointer border border-rose-700/50">
+                                    <span class="block text-[10px] text-rose-300">Ambulans Hebat</span>
+                                    <span class="font-mono font-extrabold text-xs text-yellow-300">☎ 119</span>
+                                </button>
+                                <button onclick="copyToClipboard('110', 'Polisi 110')" class="bg-rose-950/80 hover:bg-rose-950 px-2 py-1.5 rounded-lg text-left transition-colors cursor-pointer border border-rose-700/50">
+                                    <span class="block text-[10px] text-rose-300">Polrestabes</span>
+                                    <span class="font-mono font-extrabold text-xs text-yellow-300">☎ 110</span>
+                                </button>
+                                <button onclick="copyToClipboard('113', 'Damkar 113')" class="bg-rose-950/80 hover:bg-rose-950 px-2 py-1.5 rounded-lg text-left transition-colors cursor-pointer border border-rose-700/50">
+                                    <span class="block text-[10px] text-rose-300">Pemadam Kebakaran</span>
+                                    <span class="font-mono font-extrabold text-xs text-yellow-300">☎ 113</span>
+                                </button>
+                                <button onclick="copyToClipboard('0243541234', 'PMI Semarang')" class="bg-rose-950/80 hover:bg-rose-950 px-2 py-1.5 rounded-lg text-left transition-colors cursor-pointer border border-rose-700/50 col-span-2 sm:col-span-1">
+                                    <span class="block text-[10px] text-rose-300">PMI Semarang</span>
+                                    <span class="font-mono font-extrabold text-xs text-yellow-300">☎ (024) 3541234</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Cepat Cari Google Maps -->
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="searchNearbyGmaps('IGD Terdekat Kota Semarang')" class="flex-1 py-1.5 px-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[11px] font-bold transition-colors flex items-center justify-center gap-1">
+                                <i data-lucide="hospital" class="w-3.5 h-3.5"></i>
+                                <span>Cari IGD Terdekat</span>
+                            </button>
+                            <button onclick="searchNearbyGmaps('Apotek 24 Jam Terdekat Semarang')" class="flex-1 py-1.5 px-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition-colors flex items-center justify-center gap-1">
+                                <i data-lucide="pill" class="w-3.5 h-3.5"></i>
+                                <span>Apotek 24 Jam</span>
+                            </button>
+                            <button onclick="searchNearbyGmaps('Kantor Polisi Terdekat Semarang')" class="flex-1 py-1.5 px-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-[11px] font-bold transition-colors flex items-center justify-center gap-1">
+                                <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                                <span>Pos Polisi</span>
+                            </button>
+                        </div>
+
+                        <!-- Filter Medis -->
+                        <div class="flex items-center gap-1.5" id="darurat-filter-pills">
+                            <button onclick="setDaruratFilter('Semua')" class="darurat-pill active px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-700 text-white">Semua</button>
+                            <button onclick="setDaruratFilter('RS & IGD 24 Jam')" class="darurat-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700">RS & IGD 24 Jam</button>
+                            <button onclick="setDaruratFilter('Apotek 24 Jam')" class="darurat-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700">Apotek 24 Jam</button>
+                        </div>
+                    </div>
+
+                    <div id="darurat-list" class="flex-1 overflow-y-auto p-3 space-y-2.5">
+                        <!-- Dirender JS -->
+                    </div>
+                </div>
+
+                <!-- =================================================
+                     TAB 4: WISATA & RUTE SEJARAH
+                     ================================================= -->
+                <div id="tab-content-wisata" class="tab-panel hidden flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div class="p-3 border-b border-slate-200 bg-slate-50/80 space-y-2 shrink-0">
+                        <div class="flex items-center gap-1 bg-slate-200/70 p-1 rounded-xl">
+                            <button onclick="setWisataSubTab('rute')" id="subtab-wisata-rute" class="flex-1 py-1 px-3 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs">
+                                🗺️ 4 Rute Perjalanan
+                            </button>
+                            <button onclick="setWisataSubTab('spot')" id="subtab-wisata-spot" class="flex-1 py-1 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900">
+                                🏛️ Spot Bersejarah (12)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="wisata-list" class="flex-1 overflow-y-auto p-3 space-y-3">
+                        <!-- Dirender JS -->
+                    </div>
+                </div>
+
+                <!-- =================================================
+                     TAB 5: TEMPAT IBADAH (6 AGAMA)
+                     ================================================= -->
+                <div id="tab-content-ibadah" class="tab-panel hidden flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div class="p-3 border-b border-slate-200 bg-slate-50/80 space-y-2 shrink-0">
+                        <div class="relative">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                            <input
+                                type="text"
+                                id="search-input-ibadah"
+                                oninput="renderIbadahList()"
+                                placeholder="Cari MAJT, Gereja Blenduk, Sam Poo Kong, Vihara..."
+                                class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
+                            >
+                        </div>
+                        <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none" id="ibadah-filter-pills">
+                            <button onclick="setIbadahFilter('Semua')" class="ibadah-pill active px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-700 text-white shrink-0">Semua</button>
+                            <button onclick="setIbadahFilter('Islam')" class="ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">☪️ Islam</button>
+                            <button onclick="setIbadahFilter('Kristen')" class="ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">✝️ Kristen</button>
+                            <button onclick="setIbadahFilter('Katolik')" class="ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">✝️ Katolik</button>
+                            <button onclick="setIbadahFilter('Hindu')" class="ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">🕉️ Hindu</button>
+                            <button onclick="setIbadahFilter('Buddha')" class="ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">☸️ Buddha</button>
+                            <button onclick="setIbadahFilter('Konghucu')" class="ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">☯️ Konghucu</button>
+                        </div>
+                    </div>
+                    <div id="ibadah-list" class="flex-1 overflow-y-auto p-3 space-y-2.5">
+                        <!-- Dirender JS -->
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- =================================================================
+                 PANEL KANAN (UTAMA): GOOGLE MAPS EMBED PERMANEN
+                 ================================================================= -->
+            <section class="order-1 lg:order-2 lg:col-span-7 xl:col-span-7 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden lg:h-[calc(100vh-100px)] min-h-[520px] lg:min-h-[660px]">
+
+                <!-- BAR INFORMASI LOKASI AKTIF MAPS -->
+                <div id="active-location-bar" class="p-3 sm:px-4 sm:py-3 border-b border-slate-200 bg-gradient-to-r from-white via-slate-50/80 to-blue-50/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0">
+                    <div class="flex items-start sm:items-center gap-2.5 min-w-0">
+                        <span id="active-dot" class="w-3 h-3 mt-1 sm:mt-0 rounded-full bg-rose-600 ring-4 ring-rose-100 shrink-0"></span>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h2 id="active-title" class="text-sm sm:text-base font-extrabold text-slate-900 truncate">
+                                    Kota Semarang
+                                </h2>
+                                <span id="active-kode" class="px-2 py-0.5 bg-slate-900 text-white text-[10px] font-mono font-bold rounded-md">
+                                    33.74
+                                </span>
+                                <span id="active-extra-badge" class="px-2 py-0.5 bg-blue-100 text-blue-900 text-[10px] font-semibold rounded-md truncate">
+                                    16 Kecamatan • 177 Kelurahan
+                                </span>
+                            </div>
+                            <p id="active-subtitle" class="text-xs text-slate-500 mt-0.5 truncate">
+                                Provinsi Jawa Tengah — Klik objek di direktori sebelah kiri untuk menampilkan peta detail
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- KONTROL PETA & RESET -->
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        <div class="inline-flex p-0.5 bg-slate-100 rounded-xl border border-slate-200">
+                            <button
+                                id="btn-map-standard"
+                                onclick="setMapType('m')"
+                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-blue-950 text-white shadow-xs">
+                                <i data-lucide="map" class="w-3.5 h-3.5"></i>
+                                <span>Peta</span>
+                            </button>
+                            <button
+                                id="btn-map-satellite"
+                                onclick="setMapType('k')"
+                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900">
+                                <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                                <span>Satelit</span>
+                            </button>
+                        </div>
+
+                        <button
+                            onclick="resetMapToCity()"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-colors cursor-pointer"
+                            title="Kembalikan tampilan peta ke seluruh Kota Semarang">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-blue-800"></i>
+                            <span>Reset Kota</span>
+                        </button>
+
+                        <a
+                            id="external-gmaps-link"
+                            href="https://www.google.com/maps/search/?api=1&query=Kota+Semarang,+Jawa+Tengah"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-rose-700 hover:bg-rose-800 text-white text-xs font-semibold rounded-xl shadow-sm transition-colors">
+                            <span>Buka Maps</span>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- IFRAME GOOGLE MAPS EMBED -->
+                <div class="relative flex-1 w-full min-h-[440px] sm:min-h-[560px] bg-slate-100">
+                    <iframe
+                        id="gmaps-iframe"
+                        title="Google Maps Embed"
+                        class="w-full h-full absolute inset-0 border-0"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        allowfullscreen
+                        src="https://maps.google.com/maps?q=Kota%20Semarang,%20Jawa%20Tengah&t=m&z=12&ie=UTF8&iwloc=&output=embed">
+                    </iframe>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- =================================================================
+         DATASET & JAVASCRIPT LOGIC APLIKASI
+         ================================================================= -->
+    <script>
+        // DATASET KECAMATAN & KELURAHAN (16 Kec & 177 Kel)
+        const semarangDistricts = [
+            {
+                id: 1,
+                kecamatan: "Banyumanik",
+                kode: "33.74.11",
+                hanacaraka: "ꦧꦚꦸꦩꦤꦶꦏ꧀",
+                transliterasi: "Banyumanik",
+                kodePos: "50261–50269",
+                wilayah: "Semarang Selatan",
+                primaryRegion: "Semarang Selatan",
+                kelurahan: [
+                    "Banyumanik", "Gedawang", "Jabungan", "Ngesrep", "Padangsari",
+                    "Pedalangan", "Pudakpayung", "Srondol Kulon", "Srondol Wetan",
+                    "Sumurboto", "Tinjomoyo"
+                ]
+            },
+            {
+                id: 2,
+                kecamatan: "Candisari",
+                kode: "33.74.08",
+                hanacaraka: "ꦕꦤ꧀ꦝꦶꦱꦫꦶ",
+                transliterasi: "Candhisari",
+                kodePos: "50251–50257",
+                wilayah: "Semarang Pusat, Semarang Selatan",
+                primaryRegion: "Semarang Pusat",
+                kelurahan: [
+                    "Candi", "Jatingaleh", "Jomblang", "Kaliwiru",
+                    "Karanganyar Gunung", "Tegalsari", "Wonotingal"
+                ]
+            },
+            {
+                id: 3,
+                kecamatan: "Gajahmungkur",
+                kode: "33.74.09",
+                hanacaraka: "ꦒꦗꦃꦩꦸꦁꦏꦸꦂ",
+                transliterasi: "Gajahmungkur",
+                kodePos: "50231–50237",
+                wilayah: "Semarang Pusat, Semarang Selatan",
+                primaryRegion: "Semarang Pusat",
+                kelurahan: [
+                    "Bendanduwur", "Bendan Ngisor", "Bendungan", "Gajahmungkur",
+                    "Karangrejo", "Lempongsari", "Petompon", "Sampangan"
+                ]
+            },
+            {
+                id: 4,
+                kecamatan: "Gayamsari",
+                kode: "33.74.04",
+                hanacaraka: "ꦒꦪꦩ꧀ꦱꦫꦶ",
+                transliterasi: "Gayamsari",
+                kodePos: "50161–50167",
+                wilayah: "Semarang Utara, Semarang Timur",
+                primaryRegion: "Semarang Timur",
+                kelurahan: [
+                    "Gayamsari", "Kaligawe", "Pandean Lamper", "Sambirejo",
+                    "Sawahbesar", "Siwalan", "Tambakrejo"
+                ]
+            },
+            {
+                id: 5,
+                kecamatan: "Genuk",
+                kode: "33.74.05",
+                hanacaraka: "ꦒꦼꦤꦸꦏ꧀",
+                transliterasi: "Gěnuk",
+                kodePos: "50111–50118",
+                wilayah: "Semarang Utara, Semarang Timur",
+                primaryRegion: "Semarang Timur",
+                kelurahan: [
+                    "Bangetayu Kulon", "Bangetayu Wetan", "Banjardowo", "Gebangsari",
+                    "Genuksari", "Karangroto", "Kudu", "Muktiharjo Lor",
+                    "Penggaron Lor", "Sembungharjo", "Terboyo Kulon", "Terboyo Wetan",
+                    "Trimulyo"
+                ]
+            },
+            {
+                id: 6,
+                kecamatan: "Gunungpati",
+                kode: "33.74.12",
+                hanacaraka: "ꦒꦸꦤꦸꦁꦥꦛꦶ",
+                transliterasi: "Gunungpathi",
+                kodePos: "50221–50229",
+                wilayah: "Semarang Selatan",
+                primaryRegion: "Semarang Selatan",
+                kelurahan: [
+                    "Cepoko", "Gunungpati", "Jatirejo", "Kalisegoro", "Kandri",
+                    "Mangunsari", "Ngijo", "Nongkosawit", "Pakintelan", "Patemon",
+                    "Plalangan", "Pongangan", "Sadeng", "Sekaran", "Sukorejo", "Sumurejo"
+                ]
+            },
+            {
+                id: 7,
+                kecamatan: "Mijen",
+                kode: "33.74.14",
+                hanacaraka: "ꦩꦶꦗꦺꦤ꧀",
+                transliterasi: "Mijèn",
+                kodePos: "50211–50219",
+                wilayah: "Semarang Barat",
+                primaryRegion: "Semarang Barat",
+                kelurahan: [
+                    "Bubakan", "Cangkiran", "Jatibarang", "Jatisari", "Karangmalang",
+                    "Kedungpane", "Mijen", "Ngadirgo", "Pesantren", "Polaman",
+                    "Purwosari", "Tambangan", "Wonolopo", "Wonoplumbon"
+                ]
+            },
+            {
+                id: 8,
+                kecamatan: "Ngaliyan",
+                kode: "33.74.15",
+                hanacaraka: "ꦔꦭꦶꦪꦤ꧀",
+                transliterasi: "Ngaliyan",
+                kodePos: "50181–50189",
+                wilayah: "Semarang Barat",
+                primaryRegion: "Semarang Barat",
+                kelurahan: [
+                    "Bambankerep", "Bringin", "Gondoriyo", "Kalipancur", "Ngaliyan",
+                    "Podorejo", "Purwoyoso", "Tambakaji", "Wonosari", "Wates"
+                ]
+            },
+            {
+                id: 9,
+                kecamatan: "Pedurungan",
+                kode: "33.74.06",
+                hanacaraka: "ꦥꦼꦢꦸꦫꦸꦔꦤ꧀",
+                transliterasi: "Pědurungan",
+                kodePos: "50191–50199",
+                wilayah: "Semarang Timur",
+                primaryRegion: "Semarang Timur",
+                kelurahan: [
+                    "Gemah", "Kalicari", "Muktiharjo Kidul", "Palebon",
+                    "Pedurungan Kidul", "Pedurungan Lor", "Pedurungan Tengah",
+                    "Penggaron Kidul", "Plamongan Sari", "Tlogomulyo",
+                    "Tlogosari Kulon", "Tlogosari Wetan"
+                ]
+            },
+            {
+                id: 10,
+                kecamatan: "Semarang Barat",
+                kode: "33.74.13",
+                hanacaraka: "ꦱꦼꦩꦫꦁꦏꦸꦭꦺꦴꦤ꧀",
+                transliterasi: "Sěmarang Kulon",
+                kodePos: "50141–50149",
+                wilayah: "Semarang Barat",
+                primaryRegion: "Semarang Barat",
+                kelurahan: [
+                    "Bojongsalaman", "Bongsari", "Cabean", "Gisikdrono",
+                    "Kalibanteng Kidul", "Kalibanteng Kulon", "Karangayu",
+                    "Kembangarum", "Krapyak", "Krobokan", "Manyaran",
+                    "Ngemplak Simongan", "Salaman Mloyo", "Tambakharjo",
+                    "Tawang Mas", "Tawangsari"
+                ]
+            },
+            {
+                id: 11,
+                kecamatan: "Semarang Selatan",
+                kode: "33.74.07",
+                hanacaraka: "ꦱꦼꦩꦫꦁꦏꦶꦢꦸꦭ꧀",
+                transliterasi: "Sěmarang Kidul",
+                kodePos: "50241–50249",
+                wilayah: "Semarang Pusat",
+                primaryRegion: "Semarang Pusat",
+                kelurahan: [
+                    "Barusari", "Bulustalan", "Lamper Kidul", "Lamper Lor",
+                    "Lamper Tengah", "Mugassari", "Peterongan", "Pleburan",
+                    "Randusari", "Wonodri"
+                ]
+            },
+            {
+                id: 12,
+                kecamatan: "Semarang Tengah",
+                kode: "33.74.01",
+                hanacaraka: "ꦱꦼꦩꦫꦁꦩꦢꦾ",
+                transliterasi: "Sěmarang Madyå",
+                kodePos: "50131–50139",
+                wilayah: "Semarang Pusat",
+                primaryRegion: "Semarang Pusat",
+                kelurahan: [
+                    "Bangunharjo", "Brumbungan", "Gabahan", "Jagalan", "Karangkidul",
+                    "Kauman", "Kembangsari", "Kranggan", "Miroto", "Pandansari",
+                    "Pekunden", "Pendrikan Kidul", "Pendrikan Lor", "Purwodinatan",
+                    "Sekayu"
+                ]
+            },
+            {
+                id: 13,
+                kecamatan: "Semarang Timur",
+                kode: "33.74.03",
+                hanacaraka: "ꦱꦼꦩꦫꦁꦮꦺꦠꦤ꧀",
+                transliterasi: "Sěmarang Wétan",
+                kodePos: "50121–50128",
+                wilayah: "Semarang Pusat, Semarang Utara",
+                primaryRegion: "Semarang Pusat",
+                kelurahan: [
+                    "Bugangan", "Karangtempel", "Karangturi", "Kebonagung",
+                    "Kemijen", "Mlatibaru", "Mlatiharjo", "Rejomulyo",
+                    "Rejosari", "Sarirejo"
+                ]
+            },
+            {
+                id: 14,
+                kecamatan: "Semarang Utara",
+                kode: "33.74.02",
+                hanacaraka: "ꦱꦼꦩꦫꦁꦭꦺꦴꦂ",
+                transliterasi: "Sěmarang Lor",
+                kodePos: "50171–50179",
+                wilayah: "Semarang Utara",
+                primaryRegion: "Semarang Utara",
+                kelurahan: [
+                    "Bandarharjo", "Bulu Lor", "Dadapsari", "Kuningan",
+                    "Panggung Kidul", "Panggung Lor", "Plombokan", "Purwosari",
+                    "Tanjung Mas"
+                ]
+            },
+            {
+                id: 15,
+                kecamatan: "Tembalang",
+                kode: "33.74.10",
+                hanacaraka: "ꦠꦼꦩ꧀ꦧꦭꦁ",
+                transliterasi: "Tĕmbalang",
+                kodePos: "50271–50279",
+                wilayah: "Semarang Timur, Semarang Selatan",
+                primaryRegion: "Semarang Selatan",
+                kelurahan: [
+                    "Bulusan", "Jangli", "Kedungmundu", "Kramas", "Mangunharjo",
+                    "Meteseh", "Rowosari", "Sambiroto", "Sendangguwo",
+                    "Sendangmulyo", "Tandang", "Tembalang"
+                ]
+            },
+            {
+                id: 16,
+                kecamatan: "Tugu",
+                kode: "33.74.16",
+                hanacaraka: "ꦠꦸꦒꦸ",
+                transliterasi: "Tugu",
+                kodePos: "50151–50156",
+                wilayah: "Semarang Barat",
+                primaryRegion: "Semarang Barat",
+                kelurahan: [
+                    "Jerakah", "Karanganyar", "Mangkang Kulon", "Mangkang Wetan",
+                    "Mangunharjo", "Randu Garut", "Tugurejo"
+                ]
+            }
+        ];
+
+        // DATASET KULINER & OLEH-OLEH
+        const kulinerData = [
+            {
+                id: "k1",
+                name: "Lumpia Gang Lombok",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Tengah",
+                rating: 4.8,
+                price: "Rp 22.000 - Rp 25.000 / biji",
+                hours: "08.00 - 17.00 WIB",
+                highlights: "Pelopor lumpia tertua di Semarang (sejak 1800-an), isi rebung manis gurih & udang basah/goreng.",
+                address: "Jl. Gang Lombok No.11, Purwodinatan, Semarang Tengah",
+                query: "Lumpia Gang Lombok Semarang"
+            },
+            {
+                id: "k2",
+                name: "Bandeng Juwana Elrina Pandanaran",
+                category: "Pusat Oleh-Oleh",
+                kecamatan: "Semarang Tengah",
+                rating: 4.7,
+                price: "Rp 80.000 - Rp 150.000 / kotak",
+                hours: "07.00 - 21.00 WIB",
+                highlights: "Pusat oleh-oleh utama, ikon bandeng presto duri lunak, otak-otak bandeng, & keripik cakar.",
+                address: "Jl. Pandanaran No.57, Randusari, Semarang Tengah",
+                query: "Bandeng Juwana Elrina Pandanaran Semarang"
+            },
+            {
+                id: "k3",
+                name: "Wingko Babat Kereta Api (Cap Djoeni)",
+                category: "Pusat Oleh-Oleh",
+                kecamatan: "Semarang Tengah",
+                rating: 4.6,
+                price: "Rp 35.000 - Rp 70.000 / besek",
+                hours: "07.00 - 18.00 WIB",
+                highlights: "Wingko babat legendaris kelapa muda aromatis khas Stasiun Tawang sejak 1946.",
+                address: "Jl. Cenderawasih No.14, Purwodinatan, Semarang Tengah",
+                query: "Wingko Babat Cap Kereta Api Semarang"
+            },
+            {
+                id: "k4",
+                name: "Tahu Gimbal Pak Edy",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Selatan",
+                rating: 4.6,
+                price: "Rp 23.000 / porsi",
+                hours: "10.00 - 22.00 WIB",
+                highlights: "Tahu goreng empuk, bakwan udang gimbal krispi, petis kacang kental & telor dadar khas.",
+                address: "Jl. Menteri Supeno, Mugassari (Area Taman Indonesia Kaya), Semarang Selatan",
+                query: "Tahu Gimbal Pak Edy Semarang"
+            },
+            {
+                id: "k5",
+                name: "Soto Bangkong (Pusat)",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Selatan",
+                rating: 4.5,
+                price: "Rp 18.000 - Rp 30.000 / porsi",
+                hours: "07.00 - 22.00 WIB",
+                highlights: "Soto ayam kuah bening kecokelatan khas, disajikan di mangkok kecil dengan sate kerang & perkedel.",
+                address: "Jl. Brigjen Katamso No.1, Karangturi, Semarang Selatan",
+                query: "Soto Bangkong Semarang Pusat"
+            },
+            {
+                id: "k6",
+                name: "Nasi Ayam Bu Wido",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Tengah",
+                rating: 4.7,
+                price: "Rp 15.000 - Rp 25.000 / porsi",
+                hours: "17.00 - 23.00 WIB",
+                highlights: "Nasi liwet gurih khas Semarang dengan suwiran ayam, opor telor, sambal goreng krecek & kuah areh kental.",
+                address: "Jl. Gajahmada No.109, Miroto, Semarang Tengah",
+                query: "Nasi Ayam Bu Wido Semarang"
+            },
+            {
+                id: "k7",
+                name: "Mie Kopyok Pak Dhuwur",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Tengah",
+                rating: 4.6,
+                price: "Rp 16.000 / porsi",
+                hours: "08.00 - 16.00 WIB",
+                highlights: "Mie kuning basah dengan lontong, tetelan sapi, tahu goreng, kerupuk gendar legendaris disiram kuah bawang gurih.",
+                address: "Jl. Tanjung No.18, Sekayu, Semarang Tengah",
+                query: "Mie Kopyok Pak Dhuwur Semarang"
+            },
+            {
+                id: "k8",
+                name: "Lekker Paimo",
+                category: "Jajanan & Pasar Malam",
+                kecamatan: "Semarang Tengah",
+                rating: 4.7,
+                price: "Rp 4.000 - Rp 35.000 / pcs",
+                hours: "10.00 - 17.00 WIB",
+                highlights: "Kue lekker krispi paling fenomenal dengan isian melimpah: telur, sosis, keju mozarella hingga kornet pedas.",
+                address: "Jl. Karang Anyar No.37 (Depan SMA Loyola), Brumbungan, Semarang Tengah",
+                query: "Kue Lekker Paimo Semarang"
+            },
+            {
+                id: "k9",
+                name: "Toko Oen Semarang",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Tengah",
+                rating: 4.5,
+                price: "Rp 35.000 - Rp 120.000",
+                hours: "10.00 - 21.30 WIB",
+                highlights: "Restoran kolonial bernuansa 1930-an, terkenal akan es krim homemade Belanda, poffertjes, & bistik sapi.",
+                address: "Jl. Pemuda No.52, Kembangsari, Semarang Tengah",
+                query: "Toko Oen Semarang"
+            },
+            {
+                id: "k10",
+                name: "Moaci Gemini Kentangan",
+                category: "Pusat Oleh-Oleh",
+                kecamatan: "Semarang Tengah",
+                rating: 4.8,
+                price: "Rp 30.000 - Rp 60.000 / kotak",
+                hours: "07.00 - 19.00 WIB",
+                highlights: "Kue moaci kenyal berbalut wijen dengan isian kacang tanah gurih manis tanpa bahan pengawet.",
+                address: "Jl. Kentangan Barat No.101, Jagalan, Semarang Tengah",
+                query: "Moaci Gemini Kentangan Semarang"
+            },
+            {
+                id: "k11",
+                name: "Pasar Malam Semawis (Pecinan)",
+                category: "Jajanan & Pasar Malam",
+                kecamatan: "Semarang Tengah",
+                rating: 4.7,
+                price: "Rp 10.000 - Rp 50.000",
+                hours: "Jumat - Minggu (18.00 - 23.00 WIB)",
+                highlights: "Surga kuliner malam sepanjang jalan Gang Warung Pecinan: kue keranjang, gurame terbang, seafood & es hawaii.",
+                address: "Jl. Gang Warung, Kranggan, Semarang Tengah",
+                query: "Pasar Semawis Pecinan Semarang"
+            },
+            {
+                id: "k12",
+                name: "Gulai Kambing Bustaman Pak Sabar",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Utara",
+                rating: 4.6,
+                price: "Rp 30.000 / porsi",
+                hours: "09.00 - 16.00 WIB",
+                highlights: "Gulai kambing tanpa santan khas Kampung Bustaman yang diganti serundeng kelapa sangrai tumbuk aromatis.",
+                address: "Tanjung Mas (Kawasan Belakang Gereja Blenduk Kota Lama), Semarang Utara",
+                query: "Gulai Kambing Bustaman Pak Sabar Kota Lama Semarang"
+            },
+            {
+                id: "k13",
+                name: "Tahu Bakso Bu Pudji (Pusat Ungaran/Semarang)",
+                category: "Pusat Oleh-Oleh",
+                kecamatan: "Banyumanik",
+                rating: 4.8,
+                price: "Rp 45.000 / kotak",
+                hours: "07.00 - 21.00 WIB",
+                highlights: "Tahu goreng dengan isian daging sapi padat dan gurih, tersedia pilihan rebus basah atau goreng krispi.",
+                address: "Jl. Perintis Kemerdekaan, Banyumanik (Akses Perbatasan Ungaran)",
+                query: "Tahu Bakso Bu Pudji Semarang Banyumanik"
+            },
+            {
+                id: "k14",
+                name: "Kepala Manyung Bu Fat",
+                category: "Kuliner Legendaris",
+                kecamatan: "Semarang Barat",
+                rating: 4.6,
+                price: "Rp 50.000 - Rp 150.000 / porsi",
+                hours: "08.00 - 20.00 WIB",
+                highlights: "Mangut kepala ikan manyung asap super pedas berkuah santan kental khas pesisir Semarang.",
+                address: "Jl. Ariloka No.26, Krobokan, Semarang Barat",
+                query: "Kepala Manyung Bu Fat Krobokan Semarang"
+            }
+        ];
+
+        // DATASET DARURAT & MEDIS
+        const daruratData = [
+            {
+                id: "d1",
+                name: "RSUP Dr. Kariadi Semarang",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Semarang Selatan",
+                phone: "(024) 8413476",
+                type: "Rumah Sakit Umum Pusat Rujukan Tipe A",
+                address: "Jl. Dr. Sutomo No.16, Randusari, Semarang Selatan",
+                query: "RSUP Dr Kariadi Semarang"
+            },
+            {
+                id: "d2",
+                name: "RSUD K.R.M.T. Wongsonegoro (Ketileng)",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Tembalang",
+                phone: "(024) 6711500",
+                type: "RSUD Milik Pemkot Semarang Tipe B",
+                address: "Jl. Fatmawati No.1, Mangunharjo, Tembalang",
+                query: "RSUD Wongsonegoro Semarang"
+            },
+            {
+                id: "d3",
+                name: "RS SMC Telogorejo",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Semarang Tengah",
+                phone: "(024) 86466000",
+                type: "RS Swasta Utama Jantung & Saraf",
+                address: "Jl. KH Ahmad Dahlan, Pekunden, Semarang Tengah",
+                query: "RS SMC Telogorejo Semarang"
+            },
+            {
+                id: "d4",
+                name: "RS St. Elisabeth Semarang",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Candisari",
+                phone: "(024) 8310076",
+                type: "RS Swasta Rujukan Tipe B",
+                address: "Jl. Kawi No.1, Tegalsari, Candisari",
+                query: "RS St Elisabeth Semarang"
+            },
+            {
+                id: "d5",
+                name: "RS Columbia Asia Semarang",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Semarang Barat",
+                phone: "(024) 7629999",
+                type: "RS Standar Internasional",
+                address: "Jl. Siliwangi No.143, Kalibanteng Kulon, Semarang Barat",
+                query: "RS Columbia Asia Semarang"
+            },
+            {
+                id: "d6",
+                name: "RS Hermina Pandanaran",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Semarang Tengah",
+                phone: "(024) 8442525",
+                type: "RS Ibu, Anak & Umum Tipe B",
+                address: "Jl. Pandanaran No.24, Pekunden, Semarang Tengah",
+                query: "RS Hermina Pandanaran Semarang"
+            },
+            {
+                id: "d7",
+                name: "RS Nasional Diponegoro (RSND UNDIP)",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Tembalang",
+                phone: "(024) 76928010",
+                type: "RS Perguruan Tinggi Negeri Tipe C",
+                address: "Jl. Prof. H. Soedarto SH, Tembalang",
+                query: "RSND Diponegoro Tembalang Semarang"
+            },
+            {
+                id: "d8",
+                name: "RSI Sultan Agung Semarang",
+                category: "RS & IGD 24 Jam",
+                kecamatan: "Genuk",
+                phone: "(024) 6580019",
+                type: "RS Islam Pendidikan & Rujukan Jalur Pantura",
+                address: "Jl. Raya Kaligawe KM.4, Terboyo Kulon, Genuk",
+                query: "RSI Sultan Agung Semarang"
+            },
+            {
+                id: "d9",
+                name: "Apotek Kimia Farma Pandanaran (24 Jam)",
+                category: "Apotek 24 Jam",
+                kecamatan: "Semarang Tengah",
+                phone: "(024) 8315181",
+                type: "Apotek & Klinik 24 Jam Lintas Utama",
+                address: "Jl. Pandanaran No.40, Pekunden, Semarang Tengah",
+                query: "Apotek Kimia Farma Pandanaran 24 Jam"
+            },
+            {
+                id: "d10",
+                name: "Apotek K-24 Majapahit (24 Jam)",
+                category: "Apotek 24 Jam",
+                kecamatan: "Pedurungan",
+                phone: "(024) 6701824",
+                type: "Apotek Resep & Obat Darurat 24 Jam",
+                address: "Jl. Majapahit No.330, Pedurungan Kidul",
+                query: "Apotek K24 Majapahit Semarang"
+            },
+            {
+                id: "d11",
+                name: "Apotek K-24 Setiabudi (24 Jam)",
+                category: "Apotek 24 Jam",
+                kecamatan: "Banyumanik",
+                phone: "(024) 7474424",
+                type: "Apotek 24 Jam Wilayah Semarang Selatan",
+                address: "Jl. Dr. Setiabudi No.112, Srondol Banyumanik",
+                query: "Apotek K24 Setiabudi Banyumanik"
+            }
+        ];
+
+        // DATASET WISATA & RUTE SEJARAH
+        const ruteWisataData = [
+            {
+                id: "r1",
+                title: "Rute 1: Jejak Kolonial & Heritage Kota Lama",
+                tag: "Sejarah & Arsitektur",
+                duration: "🕒 ± 3 - 4 Jam",
+                target: "Kawasan Semarang Utara / Tengah",
+                description: "Jelajahi keanggunan bangunan bersejarah zaman Hindia Belanda dari Gereja Dome tertua hingga museum 3D & stasiun kereta bersejarah.",
+                stops: [
+                    { name: "1. Gereja Blenduk (GPIB Immanuel)", desc: "Gereja Kristen tertua di Jateng (1753) berdome kubah tembaga.", query: "Gereja Blenduk Kota Lama Semarang" },
+                    { name: "2. Taman Srigunting & Gedung Marba", desc: "Pusat alun-alun Kota Lama dengan bangunan bergaya neo-klasik merah bata.", query: "Taman Srigunting Semarang" },
+                    { name: "3. Spiegel Bar & Bistro / Gedung Monod", desc: "Arsitektur art-deco 1895 yang direnovasi elegan.", query: "Spiegel Bar & Bistro Semarang" },
+                    { name: "4. Stasiun Semarang Tawang", desc: "Stasiun kereta api terbesar berarsitektur kolonial 1914 di tepi tambak.", query: "Stasiun Semarang Tawang" }
+                ],
+                directionsQuery: "Gereja Blenduk to Taman Srigunting to Stasiun Semarang Tawang"
+            },
+            {
+                id: "r2",
+                title: "Rute 2: Akulturasi 3 Budaya (Tionghoa, Jawa, Melayu)",
+                tag: "Akulturasi & Kebudayaan",
+                duration: "🕒 ± 4 - 5 Jam",
+                target: "Semarang Tengah & Barat",
+                description: "Perjalanan spiritual dan sejarah percampuran kebudayaan Tionghoa (Laksamana Cheng Ho), Islam Melayu, dan Jawa Kauman.",
+                stops: [
+                    { name: "1. Kelenteng Agung Sam Poo Kong", desc: "Jejak pendaratan Laksamana Cheng Ho abad ke-15 yang megah.", query: "Kelenteng Sam Poo Kong Semarang" },
+                    { name: "2. Kelenteng Tay Kak Sie & Gang Warung", desc: "Kelenteng legendaris 1746 pusat ritual warga Pecinan.", query: "Kelenteng Tay Kak Sie Semarang" },
+                    { name: "3. Masjid Agung Kauman Semarang", desc: "Masjid bersejarah pusat dakwah Islam Jawa kuno Semarang.", query: "Masjid Agung Kauman Semarang" }
+                ],
+                directionsQuery: "Kelenteng Sam Poo Kong to Kelenteng Tay Kak Sie to Masjid Agung Kauman Semarang"
+            },
+            {
+                id: "r3",
+                title: "Rute 3: Wisata Alam & Panorama Perbukitan Selatan",
+                tag: "Alam & Relaksasi",
+                duration: "🕒 ± 5 - 6 Jam",
+                target: "Gunungpati & Tembalang",
+                description: "Menikmati hawa sejuk dataran tinggi Semarang, waduk megah, pagoda tertinggi di Indonesia, dan perkebunan hijau.",
+                stops: [
+                    { name: "1. Waduk Jatibarang & Goa Kreo", desc: "Dikelilingi waduk indah dan kawanan kera ekor panjang yang ramah.", query: "Goa Kreo Semarang" },
+                    { name: "2. Vihara Buddhagaya Watugong", desc: "Pagoda Avalokitesvara setinggi 45 meter penerima rekor MURI.", query: "Vihara Buddhagaya Watugong" },
+                    { name: "3. Taman Unnes & Desa Wisata Kandri", desc: "Ekowisata pedesaan dan perbukitan hijau Semarang Selatan.", query: "Desa Wisata Kandri Gunungpati" }
+                ],
+                directionsQuery: "Goa Kreo to Vihara Buddhagaya Watugong"
+            },
+            {
+                id: "r4",
+                title: "Rute 4: Ikon Tengah Kota & Wisata Keluarga",
+                tag: "Ikonik Kota & Hiburan",
+                duration: "🕒 ± 3 - 4 Jam",
+                target: "Semarang Pusat",
+                description: "Mengunjungi landmark paling ternama di Semarang dari Lawang Sewu yang penuh misteri hingga Lapangan Simpang Lima.",
+                stops: [
+                    { name: "1. Lawang Sewu (Gedung NIS)", desc: "Bangunan bersejarah pintu seribu pusat perkeretaapian Hindia Belanda.", query: "Lawang Sewu Semarang" },
+                    { name: "2. Tugu Muda Semarang", desc: "Monumen peringatan Pertempuran 5 Hari di Semarang.", query: "Tugu Muda Semarang" },
+                    { name: "3. Lapangan Pancasila Simpang Lima", desc: "Jantung hiburan malam, sepeda hias, dan kuliner outdoor Semarang.", query: "Simpang Lima Semarang" }
+                ],
+                directionsQuery: "Lawang Sewu to Tugu Muda to Simpang Lima Semarang"
+            }
+        ];
+
+        const wisataSpotData = [
+            { name: "Lawang Sewu", category: "Bersejarah", kecamatan: "Semarang Tengah", address: "Jl. Pemuda, Sekayu", query: "Lawang Sewu Semarang" },
+            { name: "Gereja Blenduk (Kota Lama)", category: "Bersejarah", kecamatan: "Semarang Utara", address: "Jl. Letjen Suprapto No.32", query: "Gereja Blenduk Kota Lama Semarang" },
+            { name: "Kelenteng Sam Poo Kong", category: "Religi & Sejarah", kecamatan: "Semarang Barat", address: "Jl. Simongan No.129", query: "Kelenteng Sam Poo Kong Semarang" },
+            { name: "Vihara Buddhagaya Watugong", category: "Religi & Rekreasi", kecamatan: "Banyumanik", address: "Jl. Perintis Kemerdekaan", query: "Vihara Buddhagaya Watugong" },
+            { name: "Masjid Agung Jawa Tengah (MAJT)", category: "Religi & Ikonik", kecamatan: "Gayamsari", address: "Jl. Gajah Raya, Sambirejo", query: "Masjid Agung Jawa Tengah MAJT" },
+            { name: "Goa Kreo & Waduk Jatibarang", category: "Wisata Alam", kecamatan: "Gunungpati", address: "Kel. Kandri, Gunungpati", query: "Goa Kreo Semarang" },
+            { name: "Taman Indonesia Kaya", category: "Taman Kota", kecamatan: "Semarang Selatan", address: "Jl. Menteri Supeno, Mugassari", query: "Taman Indonesia Kaya Semarang" },
+            { name: "Museum R.A. Kartini / Ranggowarsito", category: "Museum", kecamatan: "Semarang Barat", address: "Jl. Abdulrahman Saleh No.1", query: "Museum Ranggawarsita Semarang" },
+            { name: "Kampung Pelangi Semarang", category: "Wisata Tematik", kecamatan: "Semarang Selatan", address: "Jl. Dr. Sutomo, Randusari", query: "Kampung Pelangi Semarang" },
+            { name: "Semarang Zoo (Taman Satwa Mangkang)", category: "Keluarga & Satwa", kecamatan: "Tugu", address: "Jl. Raya Semarang-Kendal KM.17", query: "Semarang Zoo Mangkang" },
+            { name: "Pantai Marina Semarang", category: "Wisata Bahari", kecamatan: "Semarang Barat", address: "Kawasan Tawangsari", query: "Pantai Marina Semarang" },
+            { name: "Kota Lama Semarang (Kawasan Heritage)", category: "Bersejarah", kecamatan: "Semarang Utara", address: "Jl. Letjen Suprapto, Tanjung Mas", query: "Kota Lama Semarang" }
+        ];
+
+        // DATASET TEMPAT IBADAH (6 AGAMA RESMI)
+        const tempatIbadahData = [
+            {
+                id: "i1",
+                name: "Masjid Agung Jawa Tengah (MAJT)",
+                religion: "Islam",
+                kecamatan: "Gayamsari",
+                history: "Diresmikan 2006, berarsitektur kombinasi Jawa, Arab (6 payung elektrik raksasa ala Nabawi), & Romawi.",
+                address: "Jl. Gajah Raya, Sambirejo, Gayamsari",
+                query: "Masjid Agung Jawa Tengah MAJT Semarang"
+            },
+            {
+                id: "i2",
+                name: "Masjid Agung Kauman Semarang",
+                religion: "Islam",
+                kecamatan: "Semarang Tengah",
+                history: "Masjid tertua di Semarang (1759) beratap tumpang tiga khas arsitektur Jawa Nusantara.",
+                address: "Jl. Alun-Alun Barat No.11, Kauman, Semarang Tengah",
+                query: "Masjid Agung Kauman Semarang"
+            },
+            {
+                id: "i3",
+                name: "Masjid Kapal Safinatun Najah",
+                religion: "Islam",
+                kecamatan: "Ngaliyan",
+                history: "Masjid unik berarsitektur menyerupai Bahtera Kapal Nabi Nuh di tengah areal hijau Podorejo.",
+                address: "Jl. Kyai Padak, Podorejo, Ngaliyan",
+                query: "Masjid Kapal Safinatun Najah Semarang"
+            },
+            {
+                id: "i4",
+                name: "Masjid Layur (Masjid Menara Kampung Melayu)",
+                religion: "Islam",
+                kecamatan: "Semarang Utara",
+                history: "Didirikan 1802 oleh saudagar Arab-Melayu dengan menara unik khas pesisir.",
+                address: "Jl. Layur, Dadapsari, Semarang Utara",
+                query: "Masjid Layur Menara Kampung Melayu Semarang"
+            },
+            {
+                id: "i5",
+                name: "GPIB Immanuel (Gereja Blenduk)",
+                religion: "Kristen",
+                kecamatan: "Semarang Utara",
+                history: "Gereja Kristen Protestan tertua di Jawa Tengah (1753) dengan ciri khas kubah dome tembaga.",
+                address: "Jl. Letjen Suprapto No.32, Bandarharjo (Kota Lama)",
+                query: "Gereja Blenduk Kota Lama Semarang"
+            },
+            {
+                id: "i6",
+                name: "GKI Karangsaru",
+                religion: "Kristen",
+                kecamatan: "Semarang Tengah",
+                history: "Salah satu gereja Kristen Indonesia terbesar dan paling bersejarah di pusat kota Semarang.",
+                address: "Jl. Karangsaru No.9, Jagalan, Semarang Tengah",
+                query: "GKI Karangsaru Semarang"
+            },
+            {
+                id: "i7",
+                name: "GIA Pringgading",
+                religion: "Kristen",
+                kecamatan: "Semarang Tengah",
+                history: "Gereja Isa Almasih induk yang berdiri sejak pertengahan abad ke-20.",
+                address: "Jl. Pringgading No.13, Brumbungan, Semarang Tengah",
+                query: "GIA Pringgading Semarang"
+            },
+            {
+                id: "i8",
+                name: "Gereja Katedral Semarang (St. Perawan Maria Ratu Rosario)",
+                religion: "Katolik",
+                kecamatan: "Semarang Selatan",
+                history: "Pusat Keuskupan Agung Semarang, didirikan 1927 berarsitektur neogotik anggun.",
+                address: "Jl. Dr. Sutomo No.1, Randusari, Semarang Selatan",
+                query: "Gereja Katedral Randusari Semarang"
+            },
+            {
+                id: "i9",
+                name: "Gereja Katolik St. Yusup Gedangan",
+                religion: "Katolik",
+                kecamatan: "Semarang Timur",
+                history: "Gereja Katolik pertama di Semarang (1875) dengan dinding bata merah import dari Belanda.",
+                address: "Jl. Ronggowarsito No.11, Rejomulyo, Semarang Timur",
+                query: "Gereja Gedangan St Yusup Semarang"
+            },
+            {
+                id: "i10",
+                name: "Gereja Katolik Santa Maria Fatima",
+                religion: "Katolik",
+                kecamatan: "Banyumanik",
+                history: "Paroki utama kawasan Semarang Atas dengan arsitektur modern ramah lingkungan.",
+                address: "Jl. Mawar No.1, Banyumanik",
+                query: "Gereja Katolik Santa Maria Fatima Banyumanik"
+            },
+            {
+                id: "i11",
+                name: "Pura Agung Giri Natha",
+                religion: "Hindu",
+                kecamatan: "Gajahmungkur",
+                history: "Pura Hindu terbesar di Kota Semarang berlokasi di perbukitan indah Sampangan.",
+                address: "Jl. Sumbing No.12, Bendungan, Gajahmungkur",
+                query: "Pura Agung Giri Natha Semarang"
+            },
+            {
+                id: "i12",
+                name: "Vihara Buddhagaya Watugong",
+                religion: "Buddha",
+                kecamatan: "Banyumanik",
+                history: "Tempat ibadah & monumen sejarah Buddha dengan Pagoda Avalokitesvara setinggi 45m.",
+                address: "Jl. Perintis Kemerdekaan, Pudakpayung, Banyumanik",
+                query: "Vihara Buddhagaya Watugong Semarang"
+            },
+            {
+                id: "i13",
+                name: "Vihara Tanah Putih",
+                religion: "Buddha",
+                kecamatan: "Candisari",
+                history: "Vihara Theravada tertua di Semarang (1965) yang asri di kawasan perbukitan Tanah Putih.",
+                address: "Jl. Dr. Wahidin No.12, Jomblang, Candisari",
+                query: "Vihara Tanah Putih Semarang"
+            },
+            {
+                id: "i14",
+                name: "Vihara Mahavira Graha",
+                religion: "Buddha",
+                kecamatan: "Semarang Barat",
+                history: "Vihara kontemporer megah dengan relief patung Buddha raksasa di kawasan Marina.",
+                address: "Kawasan Marina, Tawangsari, Semarang Barat",
+                query: "Vihara Mahavira Graha Marina Semarang"
+            },
+            {
+                id: "i15",
+                name: "Kelenteng Agung Sam Poo Kong",
+                religion: "Konghucu",
+                kecamatan: "Semarang Barat",
+                history: "Kelenteng bersejarah bekas tempat pendaratan & persinggahan Laksamana Cheng Ho.",
+                address: "Jl. Simongan No.129, Bongsari, Semarang Barat",
+                query: "Kelenteng Sam Poo Kong Semarang"
+            },
+            {
+                id: "i16",
+                name: "Kelenteng Tay Kak Sie",
+                religion: "Konghucu",
+                kecamatan: "Semarang Tengah",
+                history: "Kelenteng agung Pecinan Semarang yang berdiri sejak tahun 1746 dengan replika kapal Cheng Ho.",
+                address: "Jl. Gang Lombok No.62, Purwodinatan, Semarang Tengah",
+                query: "Kelenteng Tay Kak Sie Semarang"
+            },
+            {
+                id: "i17",
+                name: "Kelenteng Siu Hok Bio",
+                religion: "Konghucu",
+                kecamatan: "Semarang Tengah",
+                history: "Kelenteng tertua di kawasan Pecinan Semarang (1753) tempat pemujaan Dewa Bumi (Tua Pek Kong).",
+                address: "Jl. Gang Cap Kau King No.1, Kranggan, Semarang Tengah",
+                query: "Kelenteng Siu Hok Bio Semarang"
+            }
+        ];
+
+        // WARNA BADGE REGION WILAYAH
+        const regionColors = {
+            "Semarang Pusat":   { badge: "bg-rose-50 text-rose-700 border-rose-200", dot: "bg-rose-600" },
+            "Semarang Utara":   { badge: "bg-sky-50 text-sky-700 border-sky-200", dot: "bg-sky-600" },
+            "Semarang Timur":   { badge: "bg-amber-50 text-amber-700 border-amber-200", dot: "bg-amber-500" },
+            "Semarang Barat":   { badge: "bg-indigo-50 text-indigo-700 border-indigo-200", dot: "bg-indigo-600" },
+            "Semarang Selatan": { badge: "bg-emerald-50 text-emerald-700 border-emerald-200", dot: "bg-emerald-600" }
+        };
+
+        // GLOBAL STATE APLIKASI
+        let activeTab = 'wilayah';
+        let currentRegion = 'Semua';
+        let searchWilayahQuery = '';
+        let selectedDistrictId = null;
+        let selectedDistrictName = null;
+        let selectedKelurahanKey = null;
+
+        let kulinerFilter = 'Semua';
+        let daruratFilter = 'Semua';
+        let wisataSubTab = 'rute';
+        let ibadahFilter = 'Semua';
+
+        let currentMapQuery = "Kota Semarang, Jawa Tengah";
+        let currentMapZoom = 12;
+        let currentMapType = 'm';
+
+        // =========================================================================
+        // 1. MANAJEMEN TAB NAVIGASI
+        // =========================================================================
+        function switchTab(tabId) {
+            activeTab = tabId;
+
+            // Reset style semua tombol tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer";
+            });
+
+            // Aktifkan tab terpilih
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn flex-1 min-w-[75px] py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 bg-blue-950 text-white shadow-sm border border-blue-800 cursor-pointer";
+            }
+
+            // Sembunyikan semua panel
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+
+            // Tampilkan panel aktif
+            const activePanel = document.getElementById(`tab-content-${tabId}`);
+            if (activePanel) {
+                activePanel.classList.remove('hidden');
+            }
+
+            // Render isi tab jika diperlukan
+            if (tabId === 'kuliner') renderKulinerList();
+            if (tabId === 'darurat') renderDaruratList();
+            if (tabId === 'wisata') renderWisataList();
+            if (tabId === 'ibadah') renderIbadahList();
+        }
+
+        // =========================================================================
+        // 2. KONTROL PETA GOOGLE MAPS EMBED
+        // =========================================================================
+        function updateGoogleMaps(queryText, zoomLevel = 13) {
+            currentMapQuery = queryText;
+            currentMapZoom = zoomLevel;
+
+            const encodedQuery = encodeURIComponent(queryText);
+            const embedUrl = `https://maps.google.com/maps?q=${encodedQuery}&t=${currentMapType}&z=${zoomLevel}&ie=UTF8&iwloc=&output=embed`;
+            const externalUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+
+            const iframe = document.getElementById('gmaps-iframe');
+            if (iframe) iframe.src = embedUrl;
+
+            const extLink = document.getElementById('external-gmaps-link');
+            if (extLink) extLink.href = externalUrl;
+        }
+
+        function setMapType(type) {
+            if (currentMapType === type) return;
+            currentMapType = type;
+
+            const btnStd = document.getElementById('btn-map-standard');
+            const btnSat = document.getElementById('btn-map-satellite');
+
+            if (type === 'm') {
+                btnStd.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-blue-950 text-white shadow-xs";
+                btnSat.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900";
+            } else {
+                btnSat.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-blue-950 text-white shadow-xs";
+                btnStd.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900";
+            }
+
+            updateGoogleMaps(currentMapQuery, currentMapZoom);
+        }
+
+        function updateActiveLocationBar({ title, subtitle, kode, extraBadge, dotClass }) {
+            document.getElementById('active-title').textContent = title;
+            document.getElementById('active-subtitle').textContent = subtitle;
+            document.getElementById('active-kode').textContent = kode || "33.74";
+            document.getElementById('active-extra-badge').textContent = extraBadge || "Kota Semarang";
+            document.getElementById('active-dot').className = `w-3 h-3 mt-1 sm:mt-0 rounded-full ${dotClass || 'bg-rose-600'} ring-4 ring-slate-200/70 shrink-0`;
+        }
+
+        function resetMapToCity() {
+            selectedDistrictId = null;
+            selectedDistrictName = null;
+            selectedKelurahanKey = null;
+
+            document.getElementById('smart-district-banner').classList.add('hidden');
+
+            updateActiveLocationBar({
+                title: "Kota Semarang",
+                subtitle: "Provinsi Jawa Tengah — Luas 373,70 km² • 1.703.799 jiwa (30 Juni 2026)",
+                kode: "33.74",
+                extraBadge: "16 Kecamatan • 177 Kelurahan",
+                dotClass: "bg-rose-600"
+            });
+
+            updateGoogleMaps("Kota Semarang, Jawa Tengah", 12);
+            renderSidebarList();
+            if (activeTab === 'kuliner') renderKulinerList();
+            if (activeTab === 'darurat') renderDaruratList();
+            if (activeTab === 'ibadah') renderIbadahList();
+        }
+
+        // =========================================================================
+        // 3. LOGIC TAB 1: WILAYAH (16 KECAMATAN)
+        // =========================================================================
+        function getFilteredDistricts() {
+            const q = searchWilayahQuery.trim().toLowerCase();
+            return semarangDistricts.filter(d => {
+                const regionOk = currentRegion === 'Semua' || d.wilayah.toLowerCase().includes(currentRegion.toLowerCase());
+                if (!regionOk) return false;
+                if (!q) return true;
+
+                return (
+                    d.kecamatan.toLowerCase().includes(q) ||
+                    d.kode.toLowerCase().includes(q) ||
+                    d.kodePos.toLowerCase().includes(q) ||
+                    d.transliterasi.toLowerCase().includes(q) ||
+                    d.wilayah.toLowerCase().includes(q) ||
+                    d.kelurahan.some(k => k.toLowerCase().includes(q))
+                );
+            });
+        }
+
+        function renderSidebarList() {
+            const districts = getFilteredDistricts();
+            const totalKel = districts.reduce((sum, d) => sum + d.kelurahan.length, 0);
+            document.getElementById('wilayah-count').textContent = `${districts.length} Kec • ${totalKel} Kel`;
+
+            const container = document.getElementById('district-list');
+            const q = searchWilayahQuery.trim().toLowerCase();
+
+            if (districts.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-slate-500">
+                        <i data-lucide="search-x" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+                        <p class="text-sm font-bold text-slate-700">Wilayah tidak ditemukan</p>
+                        <p class="text-xs text-slate-500 mt-1">Coba kata kunci kecamatan atau kelurahan lain.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = districts.map(d => {
+                const theme = regionColors[d.primaryRegion] || regionColors["Semarang Pusat"];
+                const isSelected = d.id === selectedDistrictId;
+                const hasMatchingKel = q && d.kelurahan.some(k => k.toLowerCase().includes(q));
+                const isExpanded = isSelected || hasMatchingKel;
+
+                const kelChips = d.kelurahan.map(kel => {
+                    const key = `${d.id}::${kel}`;
+                    const isKelSelected = selectedKelurahanKey === key;
+                    const isMatch = q && kel.toLowerCase().includes(q);
+
+                    let chipClass = "bg-white hover:bg-rose-50 text-slate-700 border-slate-200";
+                    if (isKelSelected) chipClass = "bg-rose-700 text-white border-rose-700 font-semibold shadow-xs";
+                    else if (isMatch) chipClass = "bg-amber-200 text-slate-900 border-amber-400 font-bold";
+
+                    return `
+                        <button
+                            type="button"
+                            onclick="event.stopPropagation(); selectKelurahan(${d.id}, '${kel.replace(/'/g, "\\'")}')"
+                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${chipClass}">
+                            <i data-lucide="map-pin" class="w-3 h-3 ${isKelSelected ? 'text-rose-200' : 'text-rose-500'}"></i>
+                            <span>${kel}</span>
+                        </button>
+                    `;
+                }).join('');
+
+                return `
+                    <div
+                        onclick="selectDistrict(${d.id})"
+                        class="rounded-xl border transition-all cursor-pointer overflow-hidden ${isSelected ? 'border-blue-900 bg-blue-50/40 shadow-sm ring-1 ring-blue-900/15' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'}">
+
+                        <div class="p-3 flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5 flex-wrap mb-1">
+                                    <span class="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-slate-900 text-white rounded">
+                                        ${d.kode}
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold rounded-full border ${theme.badge}">
+                                        <span class="w-1.5 h-1.5 rounded-full ${theme.dot}"></span>
+                                        ${d.wilayah}
+                                    </span>
+                                </div>
+                                <div class="flex items-baseline gap-2 flex-wrap">
+                                    <h3 class="text-sm font-bold text-slate-900">Kec. ${d.kecamatan}</h3>
+                                    <span class="font-javanese text-xs text-slate-500">${d.hanacaraka}</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500 mt-0.5">
+                                    <span class="font-mono">POS ${d.kodePos}</span> • <span>${d.kelurahan.length} Kelurahan</span>
+                                </p>
+                            </div>
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isExpanded ? 'bg-blue-950 text-white' : 'bg-slate-100 text-slate-500'} transition-colors">
+                                <i data-lucide="${isExpanded ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
+                            </span>
+                        </div>
+
+                        ${isExpanded ? `
+                            <div class="px-3 pb-3 pt-2 border-t border-slate-200/80 bg-slate-50/90 space-y-2">
+                                <div class="grid grid-cols-2 gap-2 text-[11px] bg-white p-2.5 rounded-xl border border-slate-200/80">
+                                    <div>
+                                        <span class="block text-[10px] font-semibold text-slate-400">Kode Kemendagri</span>
+                                        <span class="font-mono font-bold text-slate-800">${d.kode}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[10px] font-semibold text-slate-400">Kode Pos</span>
+                                        <span class="font-mono font-bold text-slate-800">${d.kodePos}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                                        Daftar Kelurahan (${d.kelurahan.length}) — Klik untuk zoom
+                                    </span>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        ${kelChips}
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function selectDistrict(districtId) {
+            const d = semarangDistricts.find(item => item.id === districtId);
+            if (!d) return;
+
+            selectedDistrictId = districtId;
+            selectedDistrictName = d.kecamatan;
+            selectedKelurahanKey = null;
+
+            showSmartDistrictBanner(d.kecamatan);
+
+            const theme = regionColors[d.primaryRegion] || regionColors["Semarang Pusat"];
+
+            updateActiveLocationBar({
+                title: `Kecamatan ${d.kecamatan}`,
+                subtitle: `${d.wilayah} • ${d.hanacaraka} (${d.transliterasi})`,
+                kode: d.kode,
+                extraBadge: `POS ${d.kodePos}`,
+                dotClass: theme.dot
+            });
+
+            updateGoogleMaps(`Kecamatan ${d.kecamatan} Semarang`, 13);
+            renderSidebarList();
+            scrollToMapMobile();
+        }
+
+        function selectKelurahan(districtId, kelurahanName) {
+            const d = semarangDistricts.find(item => item.id === districtId);
+            if (!d) return;
+
+            selectedDistrictId = districtId;
+            selectedDistrictName = d.kecamatan;
+            selectedKelurahanKey = `${districtId}::${kelurahanName}`;
+
+            showSmartDistrictBanner(`${d.kecamatan} (${kelurahanName})`);
+
+            updateActiveLocationBar({
+                title: `Kelurahan ${kelurahanName}, Kec. ${d.kecamatan}`,
+                subtitle: `${d.wilayah} • Kota Semarang`,
+                kode: d.kode,
+                extraBadge: `POS ${d.kodePos}`,
+                dotClass: "bg-rose-600"
+            });
+
+            updateGoogleMaps(`Kelurahan ${kelurahanName} Kecamatan ${d.kecamatan} Semarang`, 15);
+            renderSidebarList();
+            scrollToMapMobile();
+        }
+
+        function showSmartDistrictBanner(name) {
+            const banner = document.getElementById('smart-district-banner');
+            document.getElementById('smart-district-name').textContent = name;
+            banner.classList.remove('hidden');
+        }
+
+        function clearSelectedDistrictContext() {
+            selectedDistrictId = null;
+            selectedDistrictName = null;
+            selectedKelurahanKey = null;
+            document.getElementById('smart-district-banner').classList.add('hidden');
+            renderSidebarList();
+            if (activeTab === 'kuliner') renderKulinerList();
+            if (activeTab === 'darurat') renderDaruratList();
+            if (activeTab === 'ibadah') renderIbadahList();
+        }
+
+        function handleWilayahSearch() {
+            const input = document.getElementById('search-input-wilayah');
+            searchWilayahQuery = input.value;
+            document.getElementById('clear-search-wilayah').classList.toggle('hidden', searchWilayahQuery.trim().length === 0);
+            renderSidebarList();
+        }
+
+        function clearWilayahSearch() {
+            document.getElementById('search-input-wilayah').value = '';
+            searchWilayahQuery = '';
+            document.getElementById('clear-search-wilayah').classList.add('hidden');
+            renderSidebarList();
+        }
+
+        function setRegion(region) {
+            currentRegion = region;
+            document.querySelectorAll('.region-pill').forEach(btn => {
+                if (btn.dataset.region === region) {
+                    btn.className = "region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-950 text-white transition-all";
+                } else {
+                    btn.className = "region-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200 transition-all";
+                }
+            });
+            renderSidebarList();
+        }
+
+        // =========================================================================
+        // 4. LOGIC TAB 2: KULINER & OLEH-OLEH
+        // =========================================================================
+        function setKulinerFilter(cat) {
+            kulinerFilter = cat;
+            document.querySelectorAll('.kuliner-pill').forEach(btn => {
+                if (btn.textContent.trim().includes(cat)) {
+                    btn.className = "kuliner-pill active px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-700 text-white shrink-0";
+                } else {
+                    btn.className = "kuliner-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0";
+                }
+            });
+            renderKulinerList();
+        }
+
+        function renderKulinerList() {
+            const q = (document.getElementById('search-input-kuliner')?.value || '').toLowerCase();
+            const container = document.getElementById('kuliner-list');
+
+            const filtered = kulinerData.filter(item => {
+                const catOk = kulinerFilter === 'Semua' || item.category === kulinerFilter;
+                const distOk = !selectedDistrictName || item.kecamatan.toLowerCase().includes(selectedDistrictName.toLowerCase());
+                const searchOk = !q || item.name.toLowerCase().includes(q) || item.highlights.toLowerCase().includes(q) || item.address.toLowerCase().includes(q);
+                return catOk && distOk && searchOk;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-slate-500">
+                        <i data-lucide="utensils-crossed" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+                        <p class="text-sm font-bold text-slate-700">Kuliner tidak ditemukan</p>
+                        <p class="text-xs text-slate-500 mt-1">Coba sesuaikan kata kunci atau filter kecamatan terpilih.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-xl border border-slate-200 p-3 hover:border-rose-300 hover:shadow-sm transition-all space-y-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-rose-100 text-rose-800">
+                                    ${item.category}
+                                </span>
+                                <span class="px-2 py-0.5 text-[10px] font-medium rounded bg-slate-100 text-slate-700">
+                                    📍 Kec. ${item.kecamatan}
+                                </span>
+                            </div>
+                            <h3 class="text-sm font-extrabold text-slate-900 mt-1">${item.name}</h3>
+                        </div>
+                        <span class="flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold rounded-lg shrink-0">
+                            ⭐ ${item.rating}
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-600 leading-relaxed">${item.highlights}</p>
+
+                    <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2 rounded-lg text-slate-700">
+                        <div>
+                            <span class="block text-[10px] text-slate-400 font-semibold">Estimasi Harga</span>
+                            <span class="font-bold text-slate-900">${item.price}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-slate-400 font-semibold">Jam Buka</span>
+                            <span class="font-bold text-slate-900">${item.hours}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-1">
+                        <span class="text-[11px] text-slate-500 truncate" title="${item.address}">${item.address}</span>
+                        <button onclick="zoomToSpot('${item.name.replace(/'/g, "\\'")}', '${item.query.replace(/'/g, "\\'")}', 'Kuliner & Oleh-Oleh')" class="px-2.5 py-1.5 bg-rose-700 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shrink-0">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                            <span>Peta</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // 5. LOGIC TAB 3: DARURAT & MEDIS
+        // =========================================================================
+        function setDaruratFilter(cat) {
+            daruratFilter = cat;
+            document.querySelectorAll('.darurat-pill').forEach(btn => {
+                if (btn.textContent.trim().includes(cat)) {
+                    btn.className = "darurat-pill active px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-700 text-white";
+                } else {
+                    btn.className = "darurat-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700";
+                }
+            });
+            renderDaruratList();
+        }
+
+        function renderDaruratList() {
+            const container = document.getElementById('darurat-list');
+            const filtered = daruratData.filter(item => {
+                const catOk = daruratFilter === 'Semua' || item.category === daruratFilter;
+                const distOk = !selectedDistrictName || item.kecamatan.toLowerCase().includes(selectedDistrictName.toLowerCase());
+                return catOk && distOk;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-slate-500">
+                        <i data-lucide="shield-off" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+                        <p class="text-sm font-bold text-slate-700">Fasilitas Medis Tidak Ditemukan</p>
+                        <p class="text-xs text-slate-500 mt-1">Cobalah melepaskan filter kecamatan terpilih.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-xl border border-slate-200 p-3 hover:border-rose-400 transition-all space-y-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded ${item.category === 'RS & IGD 24 Jam' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}">
+                                ${item.category}
+                            </span>
+                            <h3 class="text-sm font-extrabold text-slate-900 mt-1">${item.name}</h3>
+                            <p class="text-xs text-slate-500">${item.type}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 bg-slate-50 p-2 rounded-lg text-xs">
+                        <span class="font-mono font-bold text-rose-700">${item.phone}</span>
+                        <button onclick="copyToClipboard('${item.phone}', '${item.name}')" class="text-[11px] text-slate-600 hover:text-slate-900 underline font-medium">
+                            Salin Telepon
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-1 text-xs">
+                        <span class="text-slate-500 truncate">${item.address}</span>
+                        <button onclick="zoomToSpot('${item.name.replace(/'/g, "\\'")}', '${item.query.replace(/'/g, "\\'")}', 'Fasilitas Medis Darurat')" class="px-2.5 py-1.5 bg-rose-700 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shrink-0">
+                            <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+                            <span>Peta</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function searchNearbyGmaps(query) {
+            updateActiveLocationBar({
+                title: query,
+                subtitle: "Pencarian Cepat Google Maps di Semarang",
+                kode: "IGD/24H",
+                extraBadge: "Pencarian Darurat",
+                dotClass: "bg-rose-600"
+            });
+            updateGoogleMaps(query, 13);
+            scrollToMapMobile();
+        }
+
+        // =========================================================================
+        // 6. LOGIC TAB 4: WISATA & RUTE SEJARAH
+        // =========================================================================
+        function setWisataSubTab(sub) {
+            wisataSubTab = sub;
+            const btnRute = document.getElementById('subtab-wisata-rute');
+            const btnSpot = document.getElementById('subtab-wisata-spot');
+
+            if (sub === 'rute') {
+                btnRute.className = "flex-1 py-1 px-3 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs";
+                btnSpot.className = "flex-1 py-1 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900";
+            } else {
+                btnSpot.className = "flex-1 py-1 px-3 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs";
+                btnRute.className = "flex-1 py-1 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900";
+            }
+            renderWisataList();
+        }
+
+        function renderWisataList() {
+            const container = document.getElementById('wisata-list');
+
+            if (wisataSubTab === 'rute') {
+                container.innerHTML = ruteWisataData.map(rute => `
+                    <div class="bg-white rounded-xl border border-slate-200 p-3.5 space-y-3 shadow-xs hover:border-amber-300 transition-all">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <div class="flex items-center gap-1.5 flex-wrap mb-1">
+                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-100 text-amber-900 border border-amber-300">
+                                        ${rute.tag}
+                                    </span>
+                                    <span class="text-[11px] font-semibold text-slate-500">${rute.duration}</span>
+                                </div>
+                                <h3 class="text-sm font-extrabold text-slate-900">${rute.title}</h3>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600">${rute.description}</p>
+
+                        <!-- Daftar Perhentian (Stops) -->
+                        <div class="space-y-1.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                                Titik Perhentian Rute:
+                            </span>
+                            ${rute.stops.map(stop => `
+                                <div onclick="zoomToSpot('${stop.name.replace(/'/g, "\\'")}', '${stop.query.replace(/'/g, "\\'")}', '${rute.title.replace(/'/g, "\\'")}')" class="p-2 bg-white rounded-lg border border-slate-200 hover:border-amber-400 transition-all cursor-pointer flex items-center justify-between gap-2">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900">${stop.name}</h4>
+                                        <p class="text-[11px] text-slate-500">${stop.desc}</p>
+                                    </div>
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <button onclick="showRouteDirections('${rute.title.replace(/'/g, "\\'")}', '${rute.directionsQuery.replace(/'/g, "\\'")}')" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs">
+                            <i data-lucide="route" class="w-4 h-4"></i>
+                            <span>Tampilkan Rute Perjalanan di Maps</span>
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        ${wisataSpotData.map(spot => `
+                            <div onclick="zoomToSpot('${spot.name.replace(/'/g, "\\'")}', '${spot.query.replace(/'/g, "\\'")}', '${spot.category}')" class="bg-white p-3 rounded-xl border border-slate-200 hover:border-amber-400 cursor-pointer transition-all space-y-1">
+                                <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-100 text-amber-800">
+                                    ${spot.category}
+                                </span>
+                                <h4 class="text-xs font-extrabold text-slate-900">${spot.name}</h4>
+                                <p class="text-[10px] text-slate-500">Kec. ${spot.kecamatan}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            lucide.createIcons();
+        }
+
+        function showRouteDirections(title, routeQuery) {
+            updateActiveLocationBar({
+                title: title,
+                subtitle: "Rute Perjalanan Wisata Terpandu",
+                kode: "RUTE",
+                extraBadge: "Petunjuk Rute",
+                dotClass: "bg-amber-500"
+            });
+            updateGoogleMaps(routeQuery, 13);
+            scrollToMapMobile();
+        }
+
+        // =========================================================================
+        // 7. LOGIC TAB 5: TEMPAT IBADAH (6 AGAMA)
+        // =========================================================================
+        function setIbadahFilter(agama) {
+            ibadahFilter = agama;
+            document.querySelectorAll('.ibadah-pill').forEach(btn => {
+                if (btn.textContent.trim().includes(agama)) {
+                    btn.className = "ibadah-pill active px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-700 text-white shrink-0";
+                } else {
+                    btn.className = "ibadah-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-700 shrink-0";
+                }
+            });
+            renderIbadahList();
+        }
+
+        function renderIbadahList() {
+            const q = (document.getElementById('search-input-ibadah')?.value || '').toLowerCase();
+            const container = document.getElementById('ibadah-list');
+
+            const filtered = tempatIbadahData.filter(item => {
+                const agamaOk = ibadahFilter === 'Semua' || item.religion === ibadahFilter;
+                const distOk = !selectedDistrictName || item.kecamatan.toLowerCase().includes(selectedDistrictName.toLowerCase());
+                const searchOk = !q || item.name.toLowerCase().includes(q) || item.history.toLowerCase().includes(q) || item.address.toLowerCase().includes(q);
+                return agamaOk && distOk && searchOk;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-slate-500">
+                        <i data-lucide="landmark" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+                        <p class="text-sm font-bold text-slate-700">Tempat Ibadah Tidak Ditemukan</p>
+                        <p class="text-xs text-slate-500 mt-1">Coba sesuaikan kata kunci atau filter agama.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-xl border border-slate-200 p-3 hover:border-emerald-300 transition-all space-y-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-100 text-emerald-800">
+                                    Agama ${item.religion}
+                                </span>
+                                <span class="px-2 py-0.5 text-[10px] font-medium rounded bg-slate-100 text-slate-700">
+                                    📍 Kec. ${item.kecamatan}
+                                </span>
+                            </div>
+                            <h3 class="text-sm font-extrabold text-slate-900 mt-1">${item.name}</h3>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-600 leading-relaxed">${item.history}</p>
+
+                    <div class="flex items-center justify-between gap-2 pt-1 text-xs">
+                        <span class="text-slate-500 truncate" title="${item.address}">${item.address}</span>
+                        <button onclick="zoomToSpot('${item.name.replace(/'/g, "\\'")}', '${item.query.replace(/'/g, "\\'")}', 'Tempat Ibadah - ${item.religion}')" class="px-2.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shrink-0">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                            <span>Peta</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // 8. UTILITAS UMUM & EKSPOR DATA
+        // =========================================================================
+        function zoomToSpot(name, queryText, categoryLabel) {
+            updateActiveLocationBar({
+                title: name,
+                subtitle: categoryLabel,
+                kode: "MAPS",
+                extraBadge: categoryLabel,
+                dotClass: "bg-rose-600"
+            });
+            updateGoogleMaps(queryText, 15);
+            scrollToMapMobile();
+        }
+
+        function scrollToMapMobile() {
+            if (window.innerWidth < 1024) {
+                document.getElementById('active-location-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function copyToClipboard(text, label) {
+            try {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                showToast(`Nomor ${label} (${text}) berhasil disalin!`);
+            } catch (err) {
+                showToast(`Nomor: ${text}`);
+            }
+        }
+
+        function buildFlatRows() {
+            const rows = [];
+            semarangDistricts.forEach(d => {
+                d.kelurahan.forEach(kel => {
+                    rows.push({
+                        Kode_Kemendagri: d.kode,
+                        Kecamatan: d.kecamatan,
+                        Hanacaraka: d.hanacaraka,
+                        Transliterasi: d.transliterasi,
+                        Kode_Pos: d.kodePos,
+                        Pembagian_Wilayah: d.wilayah,
+                        Kelurahan: kel
+                    });
+                });
+            });
+            return rows;
+        }
+
+        function downloadCSV() {
+            try {
+                const rows = buildFlatRows();
+                const headers = Object.keys(rows[0]);
+                let csv = "\uFEFF" + headers.join(",") + "\n";
+                rows.forEach(r => {
+                    csv += headers.map(h => `"${String(r[h]).replace(/"/g, '""')}"`).join(",") + "\n";
+                });
+                triggerDownload(csv, "data_wilayah_16_kecamatan_177_kelurahan_semarang.csv", "text/csv;charset=utf-8;");
+                showToast(`Berhasil mengunduh CSV (${rows.length} kelurahan)`);
+            } catch (err) {
+                showToast("Gagal membuat file CSV.");
+            }
+        }
+
+        function downloadJSON() {
+            try {
+                const rows = buildFlatRows();
+                const payload = {
+                    metadata: {
+                        kota: "Kota Semarang",
+                        provinsi: "Jawa Tengah",
+                        kode_wilayah: "33.74",
+                        jumlah_kecamatan: 16,
+                        jumlah_kelurahan: rows.length,
+                        luas_wilayah_km2: 373.70,
+                        jumlah_penduduk: 1703799
+                    },
+                    kecamatan: semarangDistricts,
+                    kuliner_dan_oleholeh: kulinerData,
+                    fasilitas_darurat: daruratData,
+                    tempat_ibadah: tempatIbadahData
+                };
+                triggerDownload(JSON.stringify(payload, null, 2), "data_direktori_lengkap_kota_semarang.json", "application/json;charset=utf-8;");
+                showToast(`Berhasil mengunduh JSON Direktori Lengkap`);
+            } catch (err) {
+                showToast("Gagal membuat file JSON.");
+            }
+        }
+
+        function triggerDownload(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // INITIALIZATION ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSidebarList();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
